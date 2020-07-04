@@ -1,0 +1,35 @@
+#include <Adafruit_DHT_Particle.h>                   
+#define DHTPIN D2                                
+#define DHTTYPE DHT11                      
+DHT dht(DHTPIN, DHTTYPE);               
+void setup()                                             
+{
+    Serial.begin(9600);                    
+    Serial.println("DHT11 test!");  
+    dht.begin();                                 
+}
+void loop()
+{    
+    delay(60000);                                             
+    float h = dht.getHumidity();                     //Humidity measurement  
+    float t = dht.getTempCelcius();               //temperature measurement
+    float f = dht.getTempFarenheit();          //temperature in Fahrenheit measurement
+if (isnan(h) || isnan(t) || isnan(f))       
+{
+    Serial.println("Failed to read from DHT sensor!");   
+//print "Failed to read from DHT sensor!" and cursor to new line for serial window
+     return;
+}
+     Serial.print("Humid: ");                                
+    Serial.print(h);                                               //print value of h
+    Serial.print("% - ");                                       
+    Serial.print("Temp: ");                                  
+    Serial.print(t);                                                //print value of t
+    Serial.print("*C");                                         
+    Serial.print(f);                                                //print value of f
+    Serial.print("*F ");                                        
+    Serial.println(Time.timeStr());                    //print "*F " on serial window
+ // Publish data and Particle.publish pushes the value out of the device at a time controlled by the device firmware.
+    Particle.publish("temp", String (t));
+    Particle.publish("humi", String (h));
+}

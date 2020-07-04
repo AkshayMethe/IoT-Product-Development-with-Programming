@@ -1,0 +1,33 @@
+#include "nokia-5110-lcd.h"
+Nokia5110LCD::Display nokiaLCD(D0, D1, D2, A0); 
+ //_pinSCE, _pinRESET, _pinDC, _pinBL, _pinSDIN, _pinSCLK
+void setup()
+{
+     nokiaLCD.begin();                       // This will setup our pins, and initialize the LCD
+     nokiaLCD.setContrast(50);       // Pretty good value, play around with it 
+     nokiaLCD.gotoXY(0, 0);
+for (int h = 0; h < 504; h++)
+{
+}
+     delay(3000);
+     nokiaLCD.clearDisplay(WHITE);
+}
+void loop()
+{
+     nokiaLCD.setRect(4, 4, 80, 44, 0, BLACK);                /*Draw a rectangle */ 
+     nokiaLCD.updateDisplay();
+     nokiaLCD.setStr("Pure Qualitat", 4, 10, BLACK);      /* Display a string */ 
+     nokiaLCD.setStr("Warehouse", 25, 20, BLACK);
+     nokiaLCD.setStr("Monitoring", 10, 32, BLACK);
+     nokiaLCD.updateDisplay();
+     delay(1000);
+     nokiaLCD.clearDisplay(WHITE);	
+     nokiaLCD.setRect(4, 4, 80, 44, 1, BLACK);     //Draw a rectangle in inverse mode 
+     nokiaLCD.updateDisplay();
+     nokiaLCD.setStr("Welcome", 25, 10, WHITE);
+     nokiaLCD.setStr("To", 40, 20, WHITE);
+     nokiaLCD.setStr("EW", 40, 32, WHITE);
+     nokiaLCD.updateDisplay();
+     delay(1000);
+     nokiaLCD.clearDisplay(WHITE);
+}

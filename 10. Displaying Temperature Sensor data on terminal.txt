@@ -1,0 +1,43 @@
+#include <Adafruit_DHT_Particle.h>                   //DHT header file 
+#define DHTPIN 2                                   //pin defined
+#define DHTTYPE DHT11	         //sensor type
+DHT dht(DHTPIN, DHTTYPE);               //structure containing dht variable (arguments)
+void setup() 
+{
+    Serial.begin(9600);                   //Enables serial channel with specified configuration.
+     Serial.println("DHTxx test!");  //serial print "DHTxx test!"
+     dht.begin();                                // Start DHT sensor
+}
+void loop() 
+{
+     delay(2000);                                                         
+     float h = dht.getHumidity();                     //Humidity measurement
+     float t = dht.getTempCelcius();               //temperature measurement
+     float f = dht.getTempFarenheit();         //temperature in Fahrenheit measurement
+     if (isnan(h) || isnan(t) || isnan(f))          
+// function determines whether a value is an illegal number (Not-a-Number). This function returns true if the value equates to NaN. Otherwise it returns false
+{
+     Serial.println("Failed to read from DHT sensor!");       
+     return;
+}
+     float hi = dht.getHeatIndex();                 //heat index measurement
+     float dp = dht.getDewPoint();                 //dewpoint measurement
+     float k = dht.getTempKelvin();                //temp in kelvin measurement
+     Serial.print("Humid: ");                            
+     Serial.print(h);                                           
+     Serial.print("% - ");                                    
+     Serial.print("Temp: ");                              
+     Serial.print(t);                                            
+     Serial.print("*C ");                                    
+     Serial.print(f);                                             
+     Serial.print("*F ");                                      
+     Serial.print(k);                                             
+     Serial.print("*K - ");                                    
+     Serial.print("DewP: ");                               
+     Serial.print(dp);                                           
+     Serial.print("*C - ");                                    
+     Serial.print("HeatI: ");                                
+     Serial.print(hi);                                            
+     Serial.println("*C");                                    
+     Serial.println(Time.timeStr());                   
+}

@@ -1,0 +1,79 @@
+#include <Adafruit_DHT_Particle.h>                   
+#define DHTPIN A2                              
+#define DHTTYPE DHT11                    
+DHT dht(DHTPIN, DHTTYPE);             
+float t;                                                    
+float h;                                                   
+float thr =30;                                        //threshold as float value
+int LED = D7;                                        //on-board led at digital 7 pin
+int LEDON = D2;                                  //LEDON at digital pin 2
+float maxt;                                           //maximum temperature (maxt) as float value
+float mint;                                             //minimum temperature (mint) as float value
+float sum;                                           //sum of temperature value for calculating average 
+float total=0;                                        //initially total equal to 0
+float avg;                                             //average temperature  as float value 
+void setup()
+{
+     Serial.begin(9600);                       
+     Serial.println("DHT11 test!");   
+     dht.begin();                                    
+     pinMode(LED, OUTPUT);           
+     pinMode(LEDON, OUTPUT);        
+}
+void loop() 
+{    
+    delay(6000);                                           
+     h = dht.getHumidity();                         
+     t = dht.getTempCelcius();                   
+     float f = dht.getTempFarenheit();                      
+ if (isnan(h) || isnan(t) || isnan(f))        
+ {
+        Serial.println("Failed to read from DHT sensor!");  
+        return;
+}
+if (t>thr)                                              //temperature value greater than threshold            
+{
+     digitalWrite(LED, HIGH);       //led will be high
+}
+else  
+{
+     digitalWrite(LED, LOW);         //led will be low
+}
+if (t>maxt)                                     //when t is greater than maxt
+{
+maxt=t;                                           //maxt equal to t
+}
+if (t<mint)                                            //when t is less than mint                          
+{
+        mint=t;                                         //mint equal to t
+}
+    sum = sum + t;                                  //sum of temperature value for taking average
+    total++;                                            //increment value of total
+    if (total > 10);                                 //when total is greater than 10
+{
+    avg = sum/total;                            //average formula
+    sum = 0;                                            //again sum value equal to 0
+    total = 0;                                         //total value equal to 0
+}
+    Serial.print("Humid: ");                       
+    Serial.print(h);                                       
+    Serial.print("% - ");                     
+    Serial.print("Temp: ");                         
+    Serial.print(t);                                        
+    Serial.println(Time.timeStr());             
+    Serial.print("mintemp");                      
+    Serial.print(mint);                                  
+    Serial.print("maxtemp");                     
+    Serial.print(maxt);                                 //print value of maxt
+    Serial.print("avgtemp");                       
+    Serial.print(avg);                                     //print value of avg
+    Serial.print("total");                              
+    Serial.print(total);                                  //print value of total  
+//publish temperature, humidity, minimum, maximum, average temperature value to cloud
+   Particle.publish("temp", String (t));     
+   Particle.publish("humi", String (h));     
+   Particle.publish("mintemp", String (mint));   
+   Particle.publish("maxhumi", String (maxt)); 
+   Particle.publish("avgtemp", String (avg));    
+//Publish an event through the Particle Device Cloud that will be forwarded to all registered listeners, such as call-backs and other devices listening via Particle.subscribe().
+}

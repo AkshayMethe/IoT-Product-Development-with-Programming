@@ -1,0 +1,14 @@
+int LDR = A3;                                            // define LDR to analog 3 pin      
+int Read;                                                   
+void setup()                        
+{
+     Serial.begin(9600);                          
+     pinMode(LDR, INPUT);                   //LDR as input     
+}
+void loop()   
+{
+     Serial.print("LDRvalue");               //serial print "LDRvalue"
+     Read = analogRead(LDR);               //Assign value to read variable
+     Serial.print(Read);                           // print read variable
+     delay(1000);             
+}

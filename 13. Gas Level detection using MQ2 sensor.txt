@@ -1,0 +1,25 @@
+# include <math.h>                              //as exponential term used so math library
+void setup()                                           
+{
+    Serial.begin(9600);                                                    
+}
+void loop() 
+{
+    float sensor_volt;                             //gas sensor value in voltage
+    float sensorValue;                            //gas sensor value
+    sensorValue = analogRead(A0);    //Reads the value from the A0 pin
+//A0 Pin has 12-bit resolution and map input voltages between 0 and 3.3 volts into integer values between 0 and 4095                       
+   double lpgppm = 26.572*exp(1.2894*(sensorValue*3.3/4095));
+  //Multiply raw analog value by 3.3/4095 to convert in to a voltage and return ppm
+   const int LPGthresh =450 ;              //set LPGthreshold equal to 450
+if (lpgppm >= LPGthresh)                       //Check for threshold
+{
+Serial.print("lpgdetected");                //print "lpgdetected" Alarm
+}
+    Serial.print("sensorvalue = ");        
+    Serial.print(sensorValue);               
+    Serial.println("V");                            //print voltage V in serial window
+    Serial.print("lpgpp");                           
+    Serial.print(lpgppm);                           //print value of lpgppm
+    delay(1000);                                         
+}

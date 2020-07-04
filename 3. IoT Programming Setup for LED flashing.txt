@@ -1,0 +1,16 @@
+int LED = D7;                     // define LED as variable for d7 onboard led
+int led1 = D2;                  //define led1 as variable for D2 pin
+void setup()                     // setup is used for initialization of pins 
+{
+     pinMode(LED, OUTPUT);        // LED with mode as OUTPUT
+     pinMode(led1, OUTPUT);     //led1 is set as output pin.
+}
+void loop() 
+{
+     digitalWrite(LED, HIGH);            // set LED high 
+     digitalWrite(led1, LOW);          // set led1 low     
+     delay(1000);                                // Wait 1 sec
+     digitalWrite(LED, LOW);            // set LED low
+     digitalWrite(led1, HIGH);         // set led1 high
+     delay(1000);                                // wait 1 sec
+}

@@ -1,0 +1,26 @@
+float startTime;
+void setup()
+{
+     Serial.begin(9600);
+     startTime = millis();
+     PMIC pmic;  
+//Initialize the PMIC class so you can call the Power Management function below.
+}
+void loop()
+{
+     FuelGauge fuel; 
+// Initialize the Fuel Gauge so we can call the fuel gauge functions below. 
+     float value1 = fuel.getVCell();
+     float value2 = fuel.getSoC();
+     Serial.println("Battery voltage");
+     Serial.println(value1);
+     Serial.println("power status");
+     Serial.println(value2);
+if (millis() > startTime + 120000) 
+{    
+     startTime = millis();       
+     Particle.publish("Battery voltage", String(value1));
+     Particle.publish("power status", String(value2));
+}
+delay(2000);
+}

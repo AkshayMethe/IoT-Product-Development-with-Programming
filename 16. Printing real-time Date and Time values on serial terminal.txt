@@ -1,0 +1,19 @@
+void setup()
+{
+    Particle.syncTime();                                /*sync to current time from particle cloud*/
+    Serial.begin(9600);                                       
+}
+void loop()
+{
+    Time.zone(+5.43);                           //add time zone of india :  time zone is (+5.43)
+    Serial.print(Time.hourFormat12(Time.now()));    //print serially current hour
+    Serial.print(":");                                             
+    Serial.print(Time.minute(Time.now()));   //print serially current minute
+    Serial.print(":");                                            
+    Serial.print(Time.second(Time.now()));   //print serially seconds hour
+if(!Time.isPM())                                    
+    Serial.println(" AM");                                 //serial print " AM" in newline
+else
+    Serial.println(" PM");                                  //serial print " PM" in newline
+    delay(1000);                       
+}

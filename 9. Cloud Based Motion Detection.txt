@@ -1,0 +1,71 @@
+int led = D0;                          
+int boardLed = D7;               
+int photoresistor = A0;        //set A0 as photoresistor  
+int power = A5;                                           
+int intactValue;                    // average value of photoresistor when the  beam intact          
+int brokenValue;                   // average value of photoresistor when the  beam is broken            
+int beamThreshold;  // This is a value halfway between led On Value and led Off Value, above  which we will assume the led is on and below which we will assume it is off.          
+bool beamBroken = false;   // Flag to mark new status. use in loop.           
+void setup()    
+{  
+       pinMode(led,OUTPUT);                    
+       pinMode(boardLed,OUTPUT);         
+       pinMode(photoresistor,INPUT);     
+       pinMode(power,OUTPUT);       
+      digitalWrite(power,HIGH);         
+      digitalWrite(boardLed,HIGH);    
+      delay(2000);                                  
+      digitalWrite(boardLed,LOW);      
+      digitalWrite(led,HIGH);              
+      delay(500); 				                    
+      int on_1 = analogRead(photoresistor);              // read photoresistor
+       delay(200);				
+       int on_2 = analogRead(photoresistor);    // read photoresistor
+       delay(300);                      // Now flash the D7 LED on and off two times to get ready
+       digitalWrite(boardLed,HIGH);        	              
+       delay(100);
+       digitalWrite(boardLed,LOW);
+       delay(100);
+       digitalWrite(boardLed,HIGH);
+       delay(2000);
+       digitalWrite(boardLed,LOW);   // Now we'll take some readings...
+       int off_1 = analogRead(photoresistor);      
+       delay(200);                                 
+       int off_2 = analogRead(photoresistor);      
+       delay(1000);   // Now flash to let us know that you've taken the readings... 
+       digitalWrite(boardLed,HIGH);
+       delay(100);       digitalWrite(boardLed,LOW);
+       digitalWrite(boardLed,HIGH);
+       delay(100);
+       digitalWrite(boardLed,LOW);
+       intactValue = (on_1+on_2)/2;
+       brokenValue = (off_1+off_2)/2;           
+       beamThreshold = (intactValue+brokenValue)/2;  
+}
+  void loop() 
+{                                 // This loop sends a publish when the beam is broken.
+        if (analogRead(photoresistor)>beamThreshold) 
+{  
+        if (beamBroken==true)                          
+{
+{					// publish this private event
+        Particle.publish("beamStatus","broken",60,PRIVATE);    
+        digitalWrite(boardLed,HIGH);
+        delay(500);                                          
+        digitalWrite(boardLed,LOW);                          
+        beamBroken=false;           // Set the flag to reflect the current status of the beam.
+}
+}
+}
+  else
+{
+          if (beamBroken==false)                  
+{					// Same deal as before...
+           Particle.publish("beamStatus","broken",60,PRIVATE);    
+           digitalWrite(boardLed,HIGH);                           
+           delay(500);                                          
+           digitalWrite(boardLed,LOW);                           
+           beamBroken=true;      
+}
+}
+}

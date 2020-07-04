@@ -1,0 +1,59 @@
+int led1 = D0;                                             
+int led2 = D7;                                             
+void setup()
+{
+     pinMode(led1, OUTPUT);                   
+     pinMode(led2, OUTPUT);                    
+     Particle.function("led",ledToggle);   //when we ask cloud for led function it will perform  ledtoggle function
+     digitalWrite(led1, LOW);                    
+     digitalWrite(led2, LOW);                    
+}
+     void loop()
+{				          //nothing to do here
+}
+int ledToggle(String command) 
+{                              //particle.function take string as argument and return integer
+     if (command=="on")   	//telling function on will turn led on
+{
+     digitalWrite(led1,HIGH);	
+     digitalWrite(led2,HIGH);	
+     return 1;		                                //if led is on it will return 1
+}
+else if (command=="off")             //telling function off will turn led off
+{
+     digitalWrite(led1,LOW);	
+     digitalWrite(led2,LOW);	
+     return 0;		                                   //if led is off it will return 0
+}
+else 
+{
+     return -1;		             //if it receives wrong value it will return -1
+}
+}
+
+/*.......................................................................................................*/
+
+// HTML code open in file_name.html format
+
+<!DOCTYPE>
+<html>
+ <body>
+ <center>
+ <br>
+ <br>
+ <br>
+ <form action="https://api.particle.io/v1/devices/_YOUR_PARTICLE_DEVICE_ID_/led?access_token=_YOUR_PARTICLE_ACCESS_TOKEN_" method="POST">
+Tell your device what to do!<br>
+ <br>
+<input type="radio" name="arg" value="on">Turn the LED on.
+<br>
+<input type="radio" name="arg" value="off">Turn the LED off.
+<br>
+<br>
+<input type="submit" value="Do it!">
+</form>
+</center>
+</body>
+</html>
+
+/*................................................................*/

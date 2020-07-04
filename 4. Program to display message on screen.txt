@@ -1,0 +1,19 @@
+int LED = D3;                                               
+int my;                                                         //my as variable
+char Read;		                          //Read as character variable
+void setup() 
+{
+     Serial.begin(9600);                              // serial baud rate are 9600
+     pinMode(LED, OUTPUT);                   
+}
+void loop()  
+{
+     Serial.print("purequalitat");              //Prints string to the serial port 
+     analogWrite(LED, 255);                      
+     Serial.println(digitalRead(LED));       //print digital value with new line.
+     Read = digitalRead(LED);                    
+     Serial.print(Read);                               //serial prints read variable
+     my = analogRead(LED);                     
+     Serial.print(my);                                 // serial print my variable value
+     delay(1000);                                        
+}
